@@ -5,6 +5,8 @@ import time
 
 locations = ["Sektion 1", "Sektion 2", "Sektion 3", "Sektion 4", "Sektion 5"]
 location = "Drivhus"
+current_Choosen = ""
+next_Choosing = ""
 
 def selcection(pM, butn):
     index = 0
@@ -30,8 +32,12 @@ def selcection(pM, butn):
                     index = 3
                 else:
                     index  = 4
-
-                setText_norefresh(locations[index])
+                
+                global current_Choosen
+                global next_Choosing
+                current_Choosen = locations[index]
+                next_Choosing = "  " + locations[index+1] if len(locations) > index+1 else ""
+                setText_norefresh("->" + current_Choosen + "\n" + next_Choosing)
                 time.sleep(2)
         except IOError as ie:
             print(ie)
