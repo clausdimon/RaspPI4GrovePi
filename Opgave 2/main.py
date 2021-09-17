@@ -25,23 +25,24 @@ pinMode(butn_changer, "INPUT")
 
 i = 0
 setRGB(240,248,250)
-
+setText("")
 sektion = lO.selcection(potentiometer, butn)
 while True:
     try:
+        setText("")
         cL.clearLight(gLed, rLed, bLed)
         light_intensity = analogRead(light_sensor)
         butn_presed = digitalRead(butn)
         if light_intensity <= 100:
             setText_norefresh(sektion + "\nNightTime")
         else:
-            if butn_presed:
-                sTD.send()
-            else:
+            # if butn_presed:
+                # sTD.send()
+            # else:
                 tE.tempeture(gLed, bLed, rLed, butn, sektion, butn_changer)
                 i += 1
                 if i%25 == 0:
-                    wA.waterThemPlants()
+                    wA.waterThemPlants(butn_changer)
                 light_intensity = analogRead(light_sensor)
                 if light_intensity <= 300 and light_intensity >100:
                     eL.moreLight(round(light_intensity/4), gLed, bLed, rLed)

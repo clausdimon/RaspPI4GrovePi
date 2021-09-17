@@ -1,17 +1,23 @@
 import json
 import requests
+from requests.models import HTTPBasicAuth
 
 def send():
 
     json_data = None
 
-    with open('data.txt') as json_file:
+    with open('data.json', 'r') as json_file:
         json_data = json.load(json_file)
 
-    auth =('test', 'test')
+    auth =HTTPBasicAuth('test', 'test')
+    header = {
+        'content-type': 'application/json',
+        'accept': 'application/json'
+    }
 
-    r = requests.post("https://10.130.54.67:5000/Temperatures", json =json_data, auth=auth)
+    r = requests.post("https://10.130.54.67:5000/Temperatures", json=json_data, headers=header, auth=auth, verify=False)
 
-    f = open('data.txt', 'r+')
-    f.seek(0)
-    f.truncate()
+    dataTemp = []
+
+    with open('data.json', "w" ) as file:
+        json.dump(dataTemp, file)

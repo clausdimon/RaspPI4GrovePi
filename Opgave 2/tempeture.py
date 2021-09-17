@@ -3,10 +3,9 @@ from grovepi import *
 from grove_rgb_lcd import *
 import time
 import json
+import sendToDatabase as sTD
 
 dht_sensor = 7
-tempC 
-tempF
 
 def lightOn(light):
     digitalWrite(light, 1)
@@ -43,8 +42,6 @@ def tempeture(glight, blight, rlight, butn, place, butn_change):
         [temp, hum] = dht(dht_sensor, 0)
         checkTemp(temp, glight, blight, rlight)
         if celcius == False:
-            global tempC
-            global tempF
             tempC = temp
             tempF = temp*1.8 + 32
             t = str(round(tempF))
@@ -52,29 +49,37 @@ def tempeture(glight, blight, rlight, butn, place, butn_change):
             setText_norefresh(t + "F " + h + "%\n" + place)
             tempToJson(tempC, tempF, place)
         else:
-            global tempC
-            global tempF
             tempC = temp
             tempF = temp*1.8 + 32
             t = str(tempC)
             h = str(hum)
             setText_norefresh(t + "C " + h + "%\n" + place)
             tempToJson(tempC, tempF, place)
-            
+
     except IOError as ie:
         print(ie)
     except TypeError as te:
         print(te)
 def tempToJson(tC, tF, sektion):
-    data = {}
-    data['temperature'] =  []
-    data["temperature"].append({
-        'tempC': tC,
-        'tempF': tF,
-        'location': sektion
-    })
 
-    with open('data.txt', 'w') as outfile:
-        json.dump(data, outfile)
+    filename = 'data.json'
+    new_data ={
+        "tempC": tC,
+        "tempF": tF,
+        "location": sektion
+    }
+
+    with open(filename, "r") as file:
+        data = json.load(file)
+
+    data.append(new_data)
+
+    with open(filename, "w") as file:
+        json.dump(data, file)
+
+    sTD.send()
+
+    # with open('data.json', 'w') as file:
+        #json.dump(new_data, file)
     
     

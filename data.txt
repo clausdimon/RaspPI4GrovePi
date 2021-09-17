@@ -1,0 +1,1 @@
+{"tempC": 20.0, "tempF": 68.0, "location": "Drivhus Sektion 1"}
